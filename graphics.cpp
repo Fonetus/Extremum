@@ -90,3 +90,40 @@ int graphics_func(double left_border, double right_border, double result, int ty
     }
     return 0;
 }
+
+int graphics_precision(const std::map<int, std::tuple<double, double>>& diction, int type, double left_border, double right_border) {
+    Plot plot1;
+    plot1.xlabel("iteration");
+    plot1.ylabel("center");
+
+    Vec vec_for_x, vec_for_y;
+    plot1.xrange(0.0, diction.size());
+    plot1.yrange(left_border, right_border);
+
+    plot1.legend()
+            .atOutsideBottom()
+            .displayHorizontal()
+            .displayExpandWidthBy(2);
+
+    for (const auto& pair : diction) {
+        vec_for_x = linspace(pair.first, pair.first, 200);
+        vec_for_y = linspace(std::get<0>(pair.second), std::get<1>(pair.second), 200);
+        plot1.drawCurve(vec_for_x, vec_for_y).label("iteration :" + std::to_string(pair.first));
+    }
+
+
+    if (type == 1) {
+        plot1.save("precision_dichotomy.pdf");
+    } else if (type == 2) {
+        plot1.save("precision_section.pdf");
+    } else if (type == 3) {
+        plot1.save("precision_perebor.pdf");
+    }
+    return 0;
+}
+
+FuncOutput dixot(double left_border, double right_border, double eps, int l, std::string function);
+
+FuncOutput golden_section(int word, double right_border, double left_border, double e, std::string function);
+
+FuncOutput perebor(std::string& function, double left_border, double right_border, double step, bool find_max);
